@@ -8,15 +8,16 @@ from cryptography.fernet import Fernet, InvalidToken
 
 app = Flask(__name__)
 CORS(app)
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 def get_fernet(password):
     # Hash password to a consistent 32 bytes and base64 format it for Fernet
     digest = hashlib.sha256(password.encode()).digest()
     return Fernet(base64.urlsafe_b64encode(digest))
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def home():
-    return "SecretLens Backend is running! Please access the React frontend at http://localhost:5173"
+    return "SecretLens Backend Running 🚀"
 
 def text_to_binary(message):
     return ''.join(format(ord(i), '08b') for i in message)
@@ -161,5 +162,5 @@ def decode():
 
     return {"message": decrypted_message}
 
-if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
